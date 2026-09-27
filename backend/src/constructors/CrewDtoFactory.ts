@@ -1,1 +1,10 @@
-export const createCrewDto = (overrides = {}) => ({ id: 1, name: "name 1", leader_id: 1, skill_tags: "skill tags 1", duty_status: "ASSIGNED", current_ticket_id: 1, contact_phone: "13800000001", ...overrides });
+export const createCrewDto = (overrides = {}) => ({
+  id: 1,
+  name: "",
+  leader_id: 1,
+  skill_tags: [] as string[],
+  duty_status: "ON_DUTY",
+  current_ticket_id: null as number | null,
+  contact_phone: "",
+  ...overrides
+});

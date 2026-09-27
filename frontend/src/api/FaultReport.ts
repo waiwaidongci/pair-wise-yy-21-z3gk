@@ -1,21 +1,18 @@
-import { mockData } from "../mocks/seedData";
+import { mockTicketServer } from "../mocks/mockServer";
+import { request } from "./http";
 import type { FaultReport } from "../types/FaultReport";
 
-const endpoint = "/api/fault-report";
+const endpoint = "/fault-report";
 
 export async function listFaultReport(): Promise<FaultReport[]> {
-  if (typeof fetch !== "undefined" && endpoint.startsWith("/api") && true) {
-    try {
-      const res = await fetch(endpoint);
-      if (res.ok) return await res.json();
-    } catch {
-      // Local mock fallback keeps the UI available during offline review.
-    }
+  try {
+    return await request<FaultReport[]>(endpoint);
+  } catch {
+    return mockTicketServer.listReports();
   }
-  return [...(mockData.faultReport as unknown as FaultReport[])];
 }
 
-export async function saveFaultReport(payload: FaultReport) {
+export async function saveFaultReport(payload: FaultReport): Promise<FaultReport> {
   console.info("save FaultReport", payload);
   return payload;
 }

@@ -1,1 +1,23 @@
-export const createRepairTicketDto = (overrides = {}) => ({ id: 1, fault_report_id: 1, team_id: 1, dispatcher_id: 1, priority: "priority 1", status: "ASSIGNED", assigned_at: "2026-06-11T09:00:00Z", restored_at: "2026-06-11T09:00:00Z", ...overrides });
+export const createRepairTicketDto = (overrides = {}) => ({
+  id: 1,
+  fault_report_id: 1,
+  team_id: null as number | null,
+  dispatcher_id: 1,
+  priority: "P2",
+  status: "WAIT_DISPATCH",
+  feeder_line: "",
+  fault_type: "OUTAGE",
+  address_desc: "",
+  merged_report_ids: [] as number[],
+  created_at: new Date(0).toISOString(),
+  assigned_at: null as string | null,
+  arrived_at: null as string | null,
+  restored_at: null as string | null,
+  closed_at: null as string | null,
+  restore_result: null as string | null,
+  conflict_team_id: null as number | null,
+  conflict_ticket_id: null as number | null,
+  conflict_reason: null as string | null,
+  events: [],
+  ...overrides
+});

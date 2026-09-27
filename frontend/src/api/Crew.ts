@@ -1,21 +1,18 @@
-import { mockData } from "../mocks/seedData";
+import { mockTicketServer } from "../mocks/mockServer";
+import { request } from "./http";
 import type { Crew } from "../types/Crew";
 
-const endpoint = "/api/crew";
+const endpoint = "/crew";
 
 export async function listCrew(): Promise<Crew[]> {
-  if (typeof fetch !== "undefined" && endpoint.startsWith("/api") && true) {
-    try {
-      const res = await fetch(endpoint);
-      if (res.ok) return await res.json();
-    } catch {
-      // Local mock fallback keeps the UI available during offline review.
-    }
+  try {
+    return await request<Crew[]>(endpoint);
+  } catch {
+    return mockTicketServer.listCrew();
   }
-  return [...(mockData.crew as unknown as Crew[])];
 }
 
-export async function saveCrew(payload: Crew) {
+export async function saveCrew(payload: Crew): Promise<Crew> {
   console.info("save Crew", payload);
   return payload;
 }

@@ -1,63 +1,85 @@
 CREATE TABLE IF NOT EXISTS grid_asset (
-  id INTEGER PRIMARY KEY,
-  asset_code TEXT,
-  asset_type TEXT,
-  feeder_line TEXT,
-  voltage_level TEXT,
-  location_desc TEXT,
-  health_status TEXT,
-  owner_team_id TEXT
-);
-
-CREATE TABLE IF NOT EXISTS fault_report (
-  id INTEGER PRIMARY KEY,
-  reporter_name TEXT,
-  phone TEXT,
-  asset_id TEXT,
-  fault_type TEXT,
-  address_desc TEXT,
-  severity TEXT,
-  report_channel TEXT,
-  status TEXT
-);
-
-CREATE TABLE IF NOT EXISTS repair_ticket (
-  id INTEGER PRIMARY KEY,
-  fault_report_id TEXT,
-  team_id TEXT,
-  dispatcher_id TEXT,
-  priority TEXT,
-  status TEXT,
-  assigned_at TEXT,
-  restored_at TEXT
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  asset_code VARCHAR(64),
+  asset_type VARCHAR(64),
+  feeder_line VARCHAR(128),
+  voltage_level VARCHAR(16),
+  location_desc VARCHAR(255),
+  health_status VARCHAR(32),
+  owner_team_id INT
 );
 
 CREATE TABLE IF NOT EXISTS crew (
-  id INTEGER PRIMARY KEY,
-  name TEXT,
-  leader_id TEXT,
-  skill_tags TEXT,
-  duty_status TEXT,
-  current_ticket_id TEXT,
-  contact_phone TEXT
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(128),
+  leader_id INT,
+  skill_tags TEXT COMMENT '逗号分隔技能标签',
+  duty_status VARCHAR(32) COMMENT 'ON_DUTY/OFF_DUTY/REST',
+  current_ticket_id INT NULL,
+  contact_phone VARCHAR(32)
+);
+
+CREATE TABLE IF NOT EXISTS fault_report (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  reporter_name VARCHAR(64),
+  phone VARCHAR(32),
+  asset_id INT,
+  fault_type VARCHAR(32),
+  address_desc VARCHAR(255),
+  severity VARCHAR(16),
+  report_channel VARCHAR(16) COMMENT 'PHONE/WECHAT/WALK_IN/SYSTEM',
+  status VARCHAR(32) COMMENT 'PENDING/MERGED/ASSIGNED/REPAIRING/RESTORED/CLOSED',
+  ticket_id INT NULL,
+  merged_into_ticket_id INT NULL,
+  reported_at DATETIME
+);
+
+CREATE TABLE IF NOT EXISTS repair_ticket (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  fault_report_id INT,
+  team_id INT NULL,
+  dispatcher_id INT,
+  priority VARCHAR(8) COMMENT 'P1/P2/P3/P4',
+  status VARCHAR(32) COMMENT 'WAIT_DISPATCH/ASSIGNED/ARRIVED/REPAIRING/RESTORED/CLOSED',
+  feeder_line VARCHAR(128),
+  fault_type VARCHAR(32),
+  address_desc VARCHAR(255),
+  merged_report_ids TEXT COMMENT 'JSON 数组合并报修 id',
+  created_at DATETIME,
+  assigned_at DATETIME NULL,
+  arrived_at DATETIME NULL,
+  restored_at DATETIME NULL,
+  closed_at DATETIME NULL,
+  restore_result TEXT NULL,
+  conflict_team_id INT NULL,
+  conflict_ticket_id INT NULL,
+  conflict_reason VARCHAR(255) NULL
+);
+
+CREATE TABLE IF NOT EXISTS ticket_event (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  ticket_id INT,
+  type VARCHAR(32) COMMENT 'CREATE/MERGE/DISPATCH/DISPATCH_CONFLICT/ARRIVE/REPAIRING/RESTORE/CLOSE',
+  note VARCHAR(500),
+  created_at DATETIME
 );
 
 CREATE TABLE IF NOT EXISTS spare_part_usage (
-  id INTEGER PRIMARY KEY,
-  ticket_id TEXT,
-  part_code TEXT,
-  part_name TEXT,
-  quantity TEXT,
-  warehouse_name TEXT,
-  approved_by TEXT,
-  usage_status TEXT
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  ticket_id INT,
+  part_code VARCHAR(64),
+  part_name VARCHAR(128),
+  quantity INT,
+  warehouse_name VARCHAR(128),
+  approved_by VARCHAR(64),
+  usage_status VARCHAR(32)
 );
 
 CREATE TABLE IF NOT EXISTS audit_log (
-  id INTEGER PRIMARY KEY,
-  actor TEXT,
-  action TEXT,
-  target_type TEXT,
-  target_id TEXT,
-  created_at TEXT
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  actor VARCHAR(64),
+  action VARCHAR(500),
+  target_type VARCHAR(32),
+  target_id VARCHAR(64),
+  created_at DATETIME
 );
