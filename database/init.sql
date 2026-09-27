@@ -18,7 +18,9 @@ CREATE TABLE IF NOT EXISTS fault_report (
   address_desc TEXT,
   severity TEXT,
   report_channel TEXT,
-  status TEXT
+  status TEXT,
+  reported_at TEXT,
+  merged_ticket_id TEXT
 );
 
 CREATE TABLE IF NOT EXISTS repair_ticket (
@@ -29,7 +31,16 @@ CREATE TABLE IF NOT EXISTS repair_ticket (
   priority TEXT,
   status TEXT,
   assigned_at TEXT,
-  restored_at TEXT
+  restored_at TEXT,
+  fault_type TEXT,
+  feeder_line TEXT,
+  address_desc TEXT,
+  caller_phones TEXT,
+  merged_report_ids TEXT,
+  arrived_at TEXT,
+  restore_result TEXT,
+  conflict_ticket_id TEXT,
+  conflict_reason TEXT
 );
 
 CREATE TABLE IF NOT EXISTS crew (
@@ -39,7 +50,8 @@ CREATE TABLE IF NOT EXISTS crew (
   skill_tags TEXT,
   duty_status TEXT,
   current_ticket_id TEXT,
-  contact_phone TEXT
+  contact_phone TEXT,
+  occupied_reason TEXT
 );
 
 CREATE TABLE IF NOT EXISTS spare_part_usage (

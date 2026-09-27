@@ -8,4 +8,6 @@ export interface FaultReport {
   severity: string;
   report_channel: string;
   status: string;
+  reported_at: string;
+  merged_ticket_id: number | null;
 }

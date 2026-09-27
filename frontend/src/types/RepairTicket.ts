@@ -7,4 +7,14 @@ export interface RepairTicket {
   status: string;
   assigned_at: string;
   restored_at: string;
+  fault_type: string;
+  feeder_line: string;
+  address_desc: string;
+  caller_phones: string[];
+  merged_report_ids: number[];
+  arrived_at: string | null;
+  restore_result: string | null;
+  conflict_ticket_id: number | null;
+  conflict_reason: string | null;
+  merged_count?: number;
 }
